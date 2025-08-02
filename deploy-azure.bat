@@ -58,12 +58,21 @@ echo 🌐 Application URL: https://%APP_URL%
 echo 📖 API Documentation: https://%APP_URL%/docs
 echo ❤️  Health Check: https://%APP_URL%/health
 echo.
-echo ⚠️  Next Steps:
-echo 1. Configure your Azure services (OpenAI, Cognitive Search, SQL Database)
-echo 2. Update environment variables in the Container App
-echo 3. Test the API endpoints
+echo ⚠️  IMPORTANT: Configure environment variables!
 echo.
-echo 🔧 To update environment variables, run:
-echo az containerapp update --name %CONTAINER_APP_NAME% --resource-group %RESOURCE_GROUP% --set-env-vars KEY=VALUE
+echo 🔧 Run these commands to set your environment variables:
+echo.
+echo az containerapp update --name %CONTAINER_APP_NAME% --resource-group %RESOURCE_GROUP% --set-env-vars ^
+echo     AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/" ^
+echo     AZURE_OPENAI_API_KEY="your-actual-key" ^
+echo     AZURE_SEARCH_ENDPOINT="https://your-search.search.windows.net" ^
+echo     AZURE_SEARCH_API_KEY="your-actual-search-key" ^
+echo     AZURE_SQL_SERVER="your-server.database.windows.net" ^
+echo     AZURE_SQL_DATABASE="your-database" ^
+echo     AZURE_SQL_USERNAME="your-username" ^
+echo     AZURE_SQL_PASSWORD="your-actual-password"
+echo.
+echo 📋 Or copy your values from .env file and run the command above
+echo.
 
 pause

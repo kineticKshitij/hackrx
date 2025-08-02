@@ -49,26 +49,35 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configure Environment Variables
-Create a `.env` file or set environment variables:
+**Important**: Never commit your actual `.env` file to Git!
+
+Copy the example file and fill in your actual values:
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with your actual Azure credentials:
 
 ```bash
 # Azure OpenAI Configuration
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
-AZURE_OPENAI_API_KEY=your-azure-openai-key
+AZURE_OPENAI_API_KEY=your-actual-azure-openai-key
 AZURE_OPENAI_MODEL_DEPLOYMENT=gpt-4
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT=text-embedding-ada-002
 
 # Azure Cognitive Search Configuration
 AZURE_SEARCH_ENDPOINT=https://your-search-service.search.windows.net
-AZURE_SEARCH_API_KEY=your-search-key
+AZURE_SEARCH_API_KEY=your-actual-search-key
 AZURE_SEARCH_INDEX_NAME=document-chunks
 
 # Azure SQL Database Configuration
 AZURE_SQL_SERVER=your-server.database.windows.net
 AZURE_SQL_DATABASE=your-database
 AZURE_SQL_USERNAME=your-username
-AZURE_SQL_PASSWORD=your-password
+AZURE_SQL_PASSWORD=your-actual-password
 ```
+
+**Security Note**: The `.env` file is excluded from Git via `.gitignore` to protect your secrets.
 
 ### 3. Run Locally
 ```bash
