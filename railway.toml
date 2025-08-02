@@ -7,6 +7,5 @@ restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
 [variables]
-PORT = "8000"
 PYTHONUNBUFFERED = "1"
 RAILWAY_STATIC_URL = "https://web-production-96eee.up.railway.app"
