@@ -151,26 +151,33 @@ class HackRXDocumentProcessor:
             }
         }
     
-    def extract_document_content(self, url: str) -> Dict[str, Any]:
-        """Extract and process document content"""
+    def extract_document_content(self, url_or_content: str) -> Dict[str, Any]:
+        """Extract and process document content from URL or direct content"""
         try:
-            logger.info(f"Downloading document: {url}")
-            response = requests.get(url, timeout=60)
-            response.raise_for_status()
-            
-            content = response.content
-            file_type = self._detect_file_type(url, response.headers)
-            
-            logger.info(f"Processing {file_type} document")
-            
-            if file_type == '.pdf' and DOC_PROCESSING_AVAILABLE:
-                return self._process_pdf(content)
-            elif file_type == '.docx' and DOC_PROCESSING_AVAILABLE:
-                return self._process_docx(content)
-            elif file_type == '.eml':
-                return self._process_email(content)
+            # Check if input is a URL or direct content
+            if url_or_content.startswith(('http://', 'https://')):
+                # URL processing
+                logger.info(f"Downloading document: {url_or_content}")
+                response = requests.get(url_or_content, timeout=60)
+                response.raise_for_status()
+                
+                content = response.content
+                file_type = self._detect_file_type(url_or_content, response.headers)
+                
+                logger.info(f"Processing {file_type} document")
+                
+                if file_type == '.pdf' and DOC_PROCESSING_AVAILABLE:
+                    return self._process_pdf(content)
+                elif file_type == '.docx' and DOC_PROCESSING_AVAILABLE:
+                    return self._process_docx(content)
+                elif file_type == '.eml':
+                    return self._process_email(content)
+                else:
+                    return self._process_text(content)
             else:
-                return self._process_text(content)
+                # Direct content processing
+                logger.info("Processing direct text content")
+                return self._process_text(url_or_content.encode('utf-8'))
                 
         except Exception as e:
             logger.error(f"Document processing error: {e}")
