@@ -6,15 +6,21 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
-# Set environment variables
+# Set environment variables for Railway optimization
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONHASHSEED=random
+ENV PIP_NO_CACHE_DIR=1
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install system dependencies efficiently
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/tmp/*
 
 # Copy requirements first for better caching
 COPY requirements.txt .
@@ -35,9 +41,9 @@ USER hackrx
 # Expose port (Railway will set PORT env var)
 EXPOSE 8080
 
-# Health check (use Railway's PORT)
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-    CMD python -c "import requests, os; requests.get(f'http://localhost:{os.environ.get(\"PORT\", 8000)}/health')" || exit 1
+# Health check (use Railway's PORT with longer timeout)
+HEALTHCHECK --interval=60s --timeout=30s --start-period=60s --retries=5 \
+    CMD python -c "import requests, os; requests.get(f'http://localhost:{os.environ.get(\"PORT\", 8000)}/health', timeout=10)" || exit 1
 
 # Start the application
 CMD ["python", "main.py"]

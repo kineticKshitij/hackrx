@@ -692,6 +692,16 @@ if FASTAPI_AVAILABLE:
             ]
         }
     
+    @app.get("/keep-alive")
+    async def keep_alive():
+        """Railway keep-alive endpoint to prevent container shutdown"""
+        return {
+            "status": "alive",
+            "timestamp": datetime.now().isoformat(),
+            "uptime": "running",
+            "railway": "active"
+        }
+    
     @app.get("/")
     async def root():
         """API information"""
@@ -840,6 +850,22 @@ if __name__ == "__main__":
     
     if FASTAPI_AVAILABLE:
         logger.info(f"FastAPI mode - starting server on {host}:{port}")
+        
+        # Railway-specific optimizations
+        railway_env = os.environ.get('RAILWAY_ENVIRONMENT')
+        if railway_env:
+            logger.info(f"Railway environment detected: {railway_env}")
+            # Add Railway-specific configurations
+            import signal
+            import sys
+            
+            def signal_handler(signum, frame):
+                logger.info(f"Received signal {signum}, graceful shutdown...")
+                sys.exit(0)
+            
+            signal.signal(signal.SIGTERM, signal_handler)
+            signal.signal(signal.SIGINT, signal_handler)
+        
         try:
             uvicorn.run(
                 app, 
@@ -847,15 +873,26 @@ if __name__ == "__main__":
                 port=port, 
                 log_level="info",
                 access_log=True,
-                use_colors=True
+                use_colors=False,  # Better for Railway logs
+                workers=1,  # Single worker for Railway
+                timeout_keep_alive=65,  # Keep connections alive
+                timeout_graceful_shutdown=30
             )
         except Exception as e:
             logger.error(f"Failed to start FastAPI server: {e}")
             # Fallback to HTTP server
             logger.info("Falling back to HTTP server")
             server = HTTPServer((host, port), HackRXHandler)
-            server.serve_forever()
+            try:
+                server.serve_forever()
+            except KeyboardInterrupt:
+                logger.info("Server stopped by user")
+                server.shutdown()
     else:
         logger.info(f"HTTP fallback mode - starting on {host}:{port}")
         server = HTTPServer((host, port), HackRXHandler)
-        server.serve_forever()
+        try:
+            server.serve_forever()
+        except KeyboardInterrupt:
+            logger.info("Server stopped by user")
+            server.shutdown()
