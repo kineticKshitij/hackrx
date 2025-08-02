@@ -784,12 +784,16 @@ else:
 
 # Main execution
 if __name__ == "__main__":
+    # Railway deployment configuration
     port = int(os.environ.get('PORT', 8000))
+    host = os.environ.get('HOST', '0.0.0.0')
     
-    print("""
+    print(f"""
     ================================================================
     HackRX LLM-Powered Intelligent Query-Retrieval System v1.0.0
     ================================================================
+    
+    🚀 Starting on {host}:{port}
     
     🎯 ENHANCED HACKRX ACCURACY FEATURES:
     
@@ -829,9 +833,23 @@ if __name__ == "__main__":
     """)
     
     if FASTAPI_AVAILABLE:
-        logger.info("FastAPI mode - full functionality")
-        uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
+        logger.info(f"FastAPI mode - starting server on {host}:{port}")
+        try:
+            uvicorn.run(
+                app, 
+                host=host, 
+                port=port, 
+                log_level="info",
+                access_log=True,
+                use_colors=True
+            )
+        except Exception as e:
+            logger.error(f"Failed to start FastAPI server: {e}")
+            # Fallback to HTTP server
+            logger.info("Falling back to HTTP server")
+            server = HTTPServer((host, port), HackRXHandler)
+            server.serve_forever()
     else:
-        logger.info("HTTP fallback mode")
-        server = HTTPServer(('', port), HackRXHandler)
+        logger.info(f"HTTP fallback mode - starting on {host}:{port}")
+        server = HTTPServer((host, port), HackRXHandler)
         server.serve_forever()

@@ -1,8 +1,12 @@
-# Railway Configuration
+# Railway Configuration for HackRX
 [deploy]
 startCommand = "python main.py"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
 
 [variables]
 PORT = "8000"
+PYTHONUNBUFFERED = "1"
+RAILWAY_STATIC_URL = "https://web-production-96eee.up.railway.app"
