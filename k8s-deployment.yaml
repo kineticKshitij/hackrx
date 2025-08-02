@@ -1,0 +1,93 @@
+# Azure Container Apps Configuration
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bajaj-hackrx-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bajaj-hackrx-api
+  template:
+    metadata:
+      labels:
+        app: bajaj-hackrx-api
+    spec:
+      containers:
+      - name: bajaj-hackrx-api
+        image: your-registry.azurecr.io/bajaj-hackrx-api:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: AZURE_OPENAI_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: openai-endpoint
+        - name: AZURE_OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: openai-api-key
+        - name: AZURE_SEARCH_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: search-endpoint
+        - name: AZURE_SEARCH_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: search-api-key
+        - name: AZURE_SQL_SERVER
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: sql-server
+        - name: AZURE_SQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: sql-database
+        - name: AZURE_SQL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: sql-username
+        - name: AZURE_SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: sql-password
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bajaj-hackrx-api-service
+spec:
+  selector:
+    app: bajaj-hackrx-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: LoadBalancer
