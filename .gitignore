@@ -18,6 +18,51 @@ var/
 wheels/
 share/python-wheels/
 *.egg-info/
+
+# Virtual environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Test files and scripts
+test_*.py
+test_*.ps1
+test_*.sh
+test_*.bat
+demo_*.ps1
+*_test.py
+test_document.txt
+hackrx_test_requests.json
+
+# Deployment files (keep only Railway specific)
+deploy_full/
+deploy_simple/
+deploy.zip
+*.bat
+*.sh
+k8s-deployment.yaml
+docker-compose.yml
+render.yaml
+startup.txt
+DEPLOYMENT.md
+railway.md
+ACCURACY_ENHANCEMENT_SUMMARY.md
+
+# Alternative Python files
+app_simple.py
+bajajhackrx.py
+enhanced_hackrx.py
+hackrx_optimized.py
+server.py
+check_env.py
+validate_env.py
+
+# Alternative requirements
+requirements_full.txt
+requirements_none.txt
+requirements_simple.txt
 .installed.cfg
 *.egg
 MANIFEST
