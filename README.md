@@ -1,9 +1,17 @@
 # Bajaj HackRX - Azure LLM Intelligence System
 
+## 🚀 GitHub Repository
+**Live Repository:** https://github.com/kineticKshitij/hackrx
+
+### 🎯 Quick Deploy from GitHub
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/3rCu9m?referralCode=bonus)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/kineticKshitij/hackrx)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/kineticKshitij/hackrx)
+
 ## 🚀 Current Deployment Status
 
 ### ✅ Successfully Deployed Demo Version
-**Live URL:** https://bajaj-hackrx-demo.azurewebsites.net/
+**Previous Live URL:** https://bajaj-hackrx-demo.azurewebsites.net/ (temporarily offline due to quota)
 
 **Available Endpoints:**
 - **GET /** - Main API information
