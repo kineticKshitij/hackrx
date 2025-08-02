@@ -33,8 +33,10 @@ try:
 except ImportError as e:
     logger.warning(f"FastAPI not available: {e}")
     FASTAPI_AVAILABLE = False
-    from http.server import HTTPServer, BaseHTTPRequestHandler
-    import urllib.parse
+
+# HTTP Server fallback (always import for fallback)
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import urllib.parse
 
 # Document processing dependencies
 try:
@@ -874,22 +876,9 @@ if __name__ == "__main__":
             signal.signal(signal.SIGINT, signal_handler)
         
         try:
-            # Railway-specific: Add background keep-alive for stability
+            # Railway-specific: Simple keep-alive logging (no async task needed)
             if railway_env:
-                import asyncio
-                
-                async def railway_keepalive():
-                    """Background task to keep Railway container active"""
-                    while True:
-                        try:
-                            await asyncio.sleep(300)  # Every 5 minutes
-                            logger.info("Railway keep-alive heartbeat")
-                        except Exception as e:
-                            logger.error(f"Keep-alive error: {e}")
-                            break
-                
-                # Start keep-alive task
-                asyncio.create_task(railway_keepalive())
+                logger.info("Railway environment - optimized for stability")
             
             uvicorn.run(
                 app, 
