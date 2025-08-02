@@ -1,16 +1,9 @@
-# Railway Configuration for HackRX
+# Railway Configuration for HackRX - Minimal Stable Setup
 [deploy]
 startCommand = "python main.py"
 healthcheckPath = "/health"
-healthcheckTimeout = 600
-restartPolicyType = "always"
-restartPolicyMaxRetries = 5
+healthcheckTimeout = 300
+restartPolicyType = "never"
 
 [variables]
 PYTHONUNBUFFERED = "1"
-PYTHONDONTWRITEBYTECODE = "1"
-RAILWAY_STATIC_URL = "https://web-production-96eee.up.railway.app"
-
-# Railway-specific optimizations
-[build]
-nixpacksConfigPath = "nixpacks.toml"

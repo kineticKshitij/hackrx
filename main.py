@@ -874,16 +874,33 @@ if __name__ == "__main__":
             signal.signal(signal.SIGINT, signal_handler)
         
         try:
+            # Railway-specific: Add background keep-alive for stability
+            if railway_env:
+                import asyncio
+                
+                async def railway_keepalive():
+                    """Background task to keep Railway container active"""
+                    while True:
+                        try:
+                            await asyncio.sleep(300)  # Every 5 minutes
+                            logger.info("Railway keep-alive heartbeat")
+                        except Exception as e:
+                            logger.error(f"Keep-alive error: {e}")
+                            break
+                
+                # Start keep-alive task
+                asyncio.create_task(railway_keepalive())
+            
             uvicorn.run(
                 app, 
                 host=host, 
                 port=port, 
                 log_level="info",
-                access_log=True,
+                access_log=False,  # Reduce logging for Railway
                 use_colors=False,  # Better for Railway logs
                 workers=1,  # Single worker for Railway
-                timeout_keep_alive=65,  # Keep connections alive
-                timeout_graceful_shutdown=30
+                timeout_keep_alive=30,  # Shorter keep-alive
+                timeout_graceful_shutdown=10  # Faster shutdown
             )
         except Exception as e:
             logger.error(f"Failed to start FastAPI server: {e}")
