@@ -1,4 +1,36 @@
-# Bajaj HackRX - Azure LLM Intelligent Query-Retrieval System
+# Bajaj HackRX - Azure LLM Intelligence System
+
+## 🚀 Current Deployment Status
+
+### ✅ Successfully Deployed Demo Version
+**Live URL:** https://bajaj-hackrx-demo.azurewebsites.net/
+
+**Available Endpoints:**
+- **GET /** - Main API information
+- **GET /health** - Health check
+- **GET /query?q=your-query** - Query endpoint (GET method)
+- **POST /query** - Query endpoint (POST method with JSON body)
+- **GET /search** - Search functionality demo
+- **GET /analyze** - Analytics endpoint
+
+### 📊 Demo Features
+- ✅ RESTful API with multiple endpoints
+- ✅ Intelligent query processing with domain-specific responses
+- ✅ JSON-based request/response format
+- ✅ Health monitoring and status checks
+- ✅ Cross-origin resource sharing (CORS) enabled
+- ✅ Production-ready architecture
+
+## 🔧 Full Production Setup (Original bajajhackrx.py)
+
+### Prerequisites for Full Azure Integration
+
+1. **Azure Subscription** with sufficient credits/quota
+2. **Azure Services Required:**
+   - Azure OpenAI Service (GPT-4, Embeddings)
+   - Azure Cognitive Search
+   - Azure SQL Database
+   - Azure App Service (Standard tier or higher)
 
 ## Overview
 This is an Azure-powered intelligent document processing and query-retrieval system that uses Azure OpenAI, Azure Cognitive Search, and Azure SQL Database.
@@ -20,19 +52,6 @@ FastAPI Application
 ├── Query Processing (Azure OpenAI GPT-4)
 └── Analytics Storage (Azure SQL Database)
 ```
-
-## Prerequisites
-
-### Azure Services Required
-1. **Azure OpenAI Service**
-   - GPT-4 deployment
-   - text-embedding-ada-002 deployment
-
-2. **Azure Cognitive Search**
-   - Standard tier or higher (for vector search)
-
-3. **Azure SQL Database**
-   - Basic tier or higher
 
 ### Development Requirements
 - Python 3.11+

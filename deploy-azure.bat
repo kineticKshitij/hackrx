@@ -9,7 +9,7 @@ set RESOURCE_GROUP=bajaj-hackrx-rg
 set LOCATION=eastus
 set CONTAINER_APP_ENV=bajaj-hackrx-env
 set CONTAINER_APP_NAME=bajaj-hackrx-api
-set ACR_NAME=bajajhackrxacr
+set ACR_NAME=bajajhackrxacr%RANDOM%
 
 REM Check if Azure CLI is installed
 az --version >nul 2>&1
