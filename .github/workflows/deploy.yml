@@ -1,14 +1,34 @@
-name: Deploy to Azure App Service
+# DISABLED: Azure App Service deployment - Using Railway instead
+# This workflow has been disabled to prevent automatic Azure deployments
+# The repository is now configured for Railway deployment only
 
+name: Deploy to Azure App Service (DISABLED)
+
+# Disable automatic triggers by commenting out the 'on' section
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+
+# Manual trigger only (if needed for testing)
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+        - test
+        - disabled
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Disable this job - Railway deployment is used instead
+    if: false
 
     steps:
     - uses: actions/checkout@v4
@@ -38,6 +58,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    # Disable this job - Railway deployment is used instead
+    if: false
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
